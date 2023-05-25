@@ -16,6 +16,7 @@ Custom function library to generate the following 1D barcodes using `=SPARKLINE(
 | --- | --- | --- |
 | `ITF()` | Numeric | Unlimited |
 | `ITF_14()` | Numeric | 13 digits + check digit |
+| `UPCA()` | Numeric | 11 + check digit (UPC-A) or 8 digits (EAN-8) |
 
 [Google Sheets Link](https://docs.google.com/spreadsheets/d/1ohJxMztwFqVtb1zq3c3esE75vtXWQDQ3wkB3KA7Ip_g/edit?usp=sharing)
 

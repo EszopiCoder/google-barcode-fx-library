@@ -3,8 +3,8 @@
 Custom function library to generate the following 1D barcodes using `=SPARKLINE()`:
 | Barcode Type | Barcodes | Status |
 | --- | --- | --- |
-| 1D Code | Code 11, Code 39, Code 93, Code 128 | In progress |
-| 1D UPC/EAN | EAN-2, EAN-5, EAN-8, EAN-13, UPC-A, UPC-E | In progress |
+| 1D Code | ~~Code 11, Code 39, Code 93, Code 128~~ | In progress |
+| 1D UPC/EAN | ~~EAN-2, EAN-5~~, EAN-8, ~~EAN-13~~, UPC-A, ~~UPC-E~~ | In progress |
 | 1D ITF | ITF, ITF-14 | Completed |
 ## Usage
 - Barcode generation is performed by repurposing `=SPARKLINE()` using the following options `{"charttype","bar";"color1","black";"color2","white"}`

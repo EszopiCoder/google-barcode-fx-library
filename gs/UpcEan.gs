@@ -29,7 +29,7 @@ function UPCA(source) {
     throw "Numeric values only";
   }
 
-  if (source.length != 11 && source.length != 12 && source.length != 8)  {
+  if (source.length != 11 && source.length != 12 && source.length != 8) {
     throw "Improper EAN-8 or UPC-A barcode length (8 or 11-12 digits)";
   } else if (source.length == 12 && GS1_Check(parseInt(source.substring(0,11))) != parseInt(source.substring(11,12))) {
     throw "Invalid check digit ("+GS1_Check(parseInt(source.substring(0,11)))+")";
@@ -125,20 +125,70 @@ function UPCE(source) {
   var dest = [[1],[1],[1]];
   //Middle characters
   for (let i=0; i<parity.length; i++) {
-    switch(parity.substring(i,i+1)) {
-      case "A":
-        for (let j = 0; j < 4; j++) {
-          dest.push([parseInt(EANsetA[source.substring(i+1,i+2)][j])]);
-        }
-        break;
-      case "B":
-        for (let j = 0; j < 4; j++) {
-          dest.push([parseInt(EANsetB[source.substring(i+1,i+2)][j])]);
-        }
-        break;
+    for (let j = 0; j < 4; j++) {
+      if (parity.substring(i,i+1) == "A") {
+        dest.push([parseInt(EANsetA[source.substring(i+1,i+2)][j])]);
+      } else {
+        dest.push([parseInt(EANsetB[source.substring(i+1,i+2)][j])]);
+      }
     }
   }
   //End characters
   dest.push([1],[1],[1],[1],[1],[1]);
+  return dest;
+}
+
+/**
+ * Generate raw EAN-13 barcode.
+ * @param {string} source  Digits to encode.
+ * @return EAN-13 barcode.
+ * @customfunction
+*/
+function EAN_13(source) {
+  //Convert any input to string
+  source = source.toString();
+
+  //Validate input
+  var regExp = new RegExp("[^0-9]");
+  if (regExp.test(source)) {
+    throw "Numeric values only";
+  }
+
+  if (source.length < 12 || source.length > 13) {
+    throw "Improper EAN-13 barcode length (12-13 digits)";
+  } else if (source.length == 13 && GS1_Check(parseInt(source.substring(0,12))) != parseInt(source.substring(12,13))) {
+    throw "Invalid check digit ("+GS1_Check(parseInt(source.substring(0,12)))+")";
+  }
+
+  //Calculate check digit
+  if (source.length == 12) {
+    source = source + GS1_Check(source);
+  }
+  
+  //Get parity for first half of symbol
+  var parity = EAN13Parity[source.substring(0,1)];
+  var half_way = 7  ;
+
+  //Start characters
+  var dest = [[1],[1],[1]];
+  //Middle characters
+  for (i=1; i<source.length; i++) {
+    if (i == half_way) {
+      dest.push([1],[1],[1],[1],[1]);
+    }
+    for (let j = 0; j < 4; j++) {
+      if (i > 1 && i < 7) {
+        if (parity.substring(i-2,i-1) == "A") {
+          dest.push([parseInt(EANsetA[source.substring(i,i+1)][j])]);
+        } else {
+          dest.push([parseInt(EANsetB[source.substring(i,i+1)][j])]);
+        }
+      } else {
+        dest.push([parseInt(EANsetA[source.substring(i,i+1)][j])]);
+      }
+    }
+  }
+  //End characters
+  dest.push([1],[1],[1]);
   return dest;
 }

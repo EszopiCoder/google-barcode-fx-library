@@ -16,7 +16,7 @@ var EANsetB = ["1123", "1222", "2212", "1141", "2311", "1321", "4111", "2131", "
 /**
  * Generate raw EAN-8 or UPC-A barcode.
  * @param {string} source  Digits to encode (EAN-8 is 8, UPC-A is 11-12).
- * @return EAN-8 or UPC-A barcode.
+ * @return Raw EAN-8 or UPC-A barcode.
  * @customfunction
 */
 function UPCA(source) {
@@ -60,7 +60,7 @@ function UPCA(source) {
 /**
  * Generate raw UPC-E barcode.
  * @param {string} source  Digits to encode.
- * @return UPC-E barcode.
+ * @return Raw UPC-E barcode.
  * @customfunction
 */
 function UPCE(source) {
@@ -141,7 +141,7 @@ function UPCE(source) {
 /**
  * Generate raw EAN-13 barcode.
  * @param {string} source  Digits to encode.
- * @return EAN-13 barcode.
+ * @return Raw EAN-13 barcode.
  * @customfunction
 */
 function EAN_13(source) {
@@ -196,7 +196,7 @@ function EAN_13(source) {
 /**
  * Generate raw EAN-5 barcode.
  * @param {string} source  Digits to encode.
- * @return EAN-5 barcode.
+ * @return Raw EAN-5 barcode.
  * @customfunction
 */
 function EAN_5(source) {
@@ -240,7 +240,7 @@ function EAN_5(source) {
 /**
  * Generate raw EAN-2 barcode.
  * @param {string} source  Digits to encode.
- * @return EAN-2 barcode.
+ * @return Raw EAN-2 barcode.
  * @customfunction
 */
 function EAN_2(source) {

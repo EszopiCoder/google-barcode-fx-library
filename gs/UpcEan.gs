@@ -37,7 +37,7 @@ function UPCA(source) {
 
   //Calculate check digit (UPC-A only)
   if (source.length == 11) {
-    source = source + GS1_Check(parseInt(source.substring(0,11)));
+    source += GS1_Check(parseInt(source.substring(0,11)));
   }
 
   var half_way = source.length / 2;
@@ -92,26 +92,26 @@ function UPCE(source) {
     case 0:
     case 1:
     case 2:
-      equivalent = equivalent+emode+"0000"+source.substring(3,6);
+      equivalent += emode+"0000"+source.substring(3,6);
       break;
     case 3:
-      equivalent = equivalent+source.substring(3,4)+"00000"+source.substring(4,6);
+      equivalent += source.substring(3,4)+"00000"+source.substring(4,6);
       break;
     case 4:
-      equivalent = equivalent+source.substring(3,5)+"00000"+source.substring(5,6);
+      equivalent += source.substring(3,5)+"00000"+source.substring(5,6);
       break;
     case 5:
     case 6:
     case 7:
     case 8:
     case 9:
-      equivalent = equivalent+source.substring(3,6)+"0000"+emode;
+      equivalent += source.substring(3,6)+"0000"+emode;
       break;
   }
   
   //Calculate check digit
   var CHECK_DIGIT = GS1_Check(equivalent);
-  equivalent = equivalent + CHECK_DIGIT;
+  equivalent += CHECK_DIGIT;
   
   //Use number system and check digit to choose a parity scheme
   var parity;
@@ -124,7 +124,7 @@ function UPCE(source) {
   //Start characters
   var dest = [[1],[1],[1]];
   //Middle characters
-  for (let i=0; i<parity.length; i++) {
+  for (let i = 0; i < parity.length; i++) {
     for (let j = 0; j < 4; j++) {
       if (parity.substring(i,i+1) == "A") {
         dest.push([parseInt(EANsetA[source.substring(i+1,i+2)][j])]);
@@ -162,22 +162,22 @@ function EAN_13(source) {
 
   //Calculate check digit
   if (source.length == 12) {
-    source = source + GS1_Check(source);
+    source += GS1_Check(source);
   }
   
   //Get parity for first half of symbol
   var parity = EAN13Parity[source.substring(0,1)];
-  var half_way = 7  ;
+  var half_way = 7;
 
   //Start characters
   var dest = [[1],[1],[1]];
   //Middle characters
-  for (i=1; i<source.length; i++) {
+  for (let i = 1; i < source.length; i++) {
     if (i == half_way) {
       dest.push([1],[1],[1],[1],[1]);
     }
     for (let j = 0; j < 4; j++) {
-      if (i > 1 && i < 7) {
+      if (i > 1 && i < half_way) {
         if (parity.substring(i-2,i-1) == "A") {
           dest.push([parseInt(EANsetA[source.substring(i,i+1)][j])]);
         } else {
@@ -190,5 +190,92 @@ function EAN_13(source) {
   }
   //End characters
   dest.push([1],[1],[1]);
+  return dest;
+}
+
+/**
+ * Generate raw EAN-5 barcode.
+ * @param {string} source  Digits to encode.
+ * @return EAN-5 barcode.
+ * @customfunction
+*/
+function EAN_5(source) {
+  //Convert any input to string
+  source = source.toString();
+
+  //Validate input
+  var regExp = new RegExp("[^0-9]");
+  if (regExp.test(source)) {
+    throw "Numeric values only";
+  }
+
+  if (source.length != 5) {
+    throw "Improper EAN-5 barcode length (5 digits)";
+  }
+
+  //Determine parity
+  var parity_sum = 3 * (parseInt(source.substring(0,1)) + parseInt(source.substring(2,3))+parseInt(source.substring(4,5)));
+  parity_sum += 9 * (parseInt(source.substring(1,2)) + parseInt(source.substring(3,4)));
+  parity_sum = parity_sum % 10;
+  var parity =  EAN5Parity[parity_sum];
+
+  //Start characters
+  var dest = [[1],[1],[2]];
+  //Middle characters
+  for (let i = 0; i < parity.length; i++) {
+    for (let j = 0; j < 4; j++) {
+      if (parity.substring(i,i+1) == "A") {
+        dest.push([parseInt(EANsetA[source.substring(i,i+1)][j])]);
+      } else {
+        dest.push([parseInt(EANsetB[source.substring(i,i+1)][j])]);
+      }
+    }
+    if (i < parity.length-1) {
+      dest.push([1],[1]);
+    }
+  }
+  return dest;
+}
+
+/**
+ * Generate raw EAN-2 barcode.
+ * @param {string} source  Digits to encode.
+ * @return EAN-2 barcode.
+ * @customfunction
+*/
+function EAN_2(source) {
+  //Convert any input to string
+  source = source.toString();
+
+  //Validate input
+  var regExp = new RegExp("[^0-9]");
+  if (regExp.test(source)) {
+    throw "Numeric values only";
+  }
+
+  if (source.length != 2) {
+    throw "Improper EAN-2 barcode length (2 digits)";
+  }
+
+  //Determine parity
+  var parity_sum = (parseInt(source.substring(0,1)) * 10) + parseInt(source.substring(1,2));
+  parity_sum = parity_sum % 4;
+  parity = EAN2Parity[parity_sum];
+
+  //Start characters
+  var dest = [[1],[1],[2]];
+  //Middle characters
+  for (let i = 0; i < parity.length; i++) {
+    for (let j = 0; j < 4; j++) {
+      if (parity.substring(i,i+1) == "A") {
+        dest.push([parseInt(EANsetA[source.substring(i,i+1)][j])]);
+      } else {
+        dest.push([parseInt(EANsetB[source.substring(i,i+1)][j])]);
+      }
+    }
+    if (i < parity.length-1) {
+      dest.push([1],[1]);
+    }
+  }
   return dest;
 }

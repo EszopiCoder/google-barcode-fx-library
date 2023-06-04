@@ -216,7 +216,7 @@ function EAN_5(source) {
   //Determine parity
   var parity_sum = 3 * (parseInt(source.substring(0,1)) + parseInt(source.substring(2,3))+parseInt(source.substring(4,5)));
   parity_sum += 9 * (parseInt(source.substring(1,2)) + parseInt(source.substring(3,4)));
-  parity_sum = parity_sum % 10;
+  parity_sum %= 10;
   var parity =  EAN5Parity[parity_sum];
 
   //Start characters
@@ -259,7 +259,7 @@ function EAN_2(source) {
 
   //Determine parity
   var parity_sum = (parseInt(source.substring(0,1)) * 10) + parseInt(source.substring(1,2));
-  parity_sum = parity_sum % 4;
+  parity_sum %= 4;
   parity = EAN2Parity[parity_sum];
 
   //Start characters

@@ -14,7 +14,7 @@ function ITF(source) {
   //Validate input
   var regExp = new RegExp("[^0-9]");
   if (regExp.test(source)) {
-    throw "Numeric values only"
+    throw "Numeric values only";
   }
 
   //ITF requires an even number of digits. If odd, add a zero to the beginning

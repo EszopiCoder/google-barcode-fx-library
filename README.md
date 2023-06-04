@@ -31,4 +31,4 @@ Custom function library to generate the following 1D barcodes using `=SPARKLINE(
 [Google Sheets Link](https://docs.google.com/spreadsheets/d/1ohJxMztwFqVtb1zq3c3esE75vtXWQDQ3wkB3KA7Ip_g/edit?usp=sharing)
 
 ## Sample Images
-Coming soon
+<img src="Images/Sample Barcodes.PNG">

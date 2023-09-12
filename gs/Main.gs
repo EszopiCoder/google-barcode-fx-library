@@ -28,7 +28,7 @@ function GS1_Check(source) {
   //Calculate check digit
   var Check_Digit = 10 - (count % 10);
   if (Check_Digit == 10) {
-    Check_Digit == 0;
+    Check_Digit = 0;
   }
 
   return Check_Digit;
